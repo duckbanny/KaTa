@@ -45,12 +45,12 @@ func main() {
 	userInputSlice := strings.Fields(userInput)
 
 	if len(userInputSlice) < 3 {
-		fmt.Println("Ошибка: строка не является математической операцией.")
+		fmt.Println("Вывод ошибки, так как строка не является математической операцией.")
 		return
 	}
 
 	if len(userInputSlice) > 3 {
-		fmt.Println("Ошибка: формат математической операции не удовлетворяет заданию — два операнда и один оператор (+, -, /, *).")
+		fmt.Println("Вывод ошибки, так как формат математической операции не удовлетворяет заданию — два операнда и один оператор (+, -, /, *).")
 		return
 	}
 
@@ -69,19 +69,23 @@ func main() {
 		}
 	)
 
-	a, aExist := romanNum[userInputSlice[0]]
-	b, bExist := romanNum[userInputSlice[2]]
+	a, aIsRoman := romanNum[userInputSlice[0]]
+	b, bIsRoman := romanNum[userInputSlice[2]]
 	resultToRoman := false
 
-	if aExist && bExist {
+	if aIsRoman && bIsRoman {
 		resultToRoman = true
 	} else {
-		var aErr, bErr error
-		a, aErr = strconv.Atoi(userInputSlice[0])
-		b, bErr = strconv.Atoi(userInputSlice[2])
+		var aIsInt, bIsInt error
+		a, aIsInt = strconv.Atoi(userInputSlice[0])
+		b, bIsInt = strconv.Atoi(userInputSlice[2])
 
-		if aErr != nil || bErr != nil {
-			fmt.Println("Ошибка: строка не является математической операцией или не является римской цифрой от 1 до 10.")
+		if aIsInt != nil || bIsInt != nil {
+			fmt.Println("Вывод ошибки, так как используются одновременно разные системы счисления.")
+			return
+		}
+		if !((a >= 1 && a <= 10) && (b >= 1 && b <= 10)) {
+			println("Вывод ошибки, числа должны быть от 1 до 10")
 			return
 		}
 	}
@@ -108,6 +112,10 @@ func main() {
 	}
 
 	if resultToRoman {
+		if result < 1 {
+			println("Вывод ошибки, так как в римской системе нет отрицательных чисел.")
+			return
+		}
 		romanResult := intToRoman(result)
 		fmt.Println(romanResult)
 	} else {
